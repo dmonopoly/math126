@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from numpy import arange, linspace, pi, e, sin
+from numpy import arange, linspace, pi, e, sin, cos
 from math import factorial
 from grapher import prepare_graph, sigma
 
@@ -15,22 +15,34 @@ def f(x_value):
         sum += sin(factorial(k)**2*x_value) / factorial(k)
     return sum
 
+# This is the derivative of f(x)
+def df(x_value):
+    array = arange(1,12,1) # Array range of 1..10
+    sum = 0
+    for k in array:
+        sum += cos(factorial(k)**2*x_value) * factorial(k)
+    return sum
+    
 ## Setting up x & y
 # 1. x E [0,1]
-x1 = linspace(0,1.,100) # 100 x-values from [0,1]
+x1 = linspace(0,1.,10000) # 10000 x-values from [0,1]
 y1 = f(x1)
 
 # 2. x E [0,0.1]
-x2 = linspace(0,.1,100) # 100 x-values from [0,0.1]
+x2 = linspace(0,.1,10000) # 10000 x-values from [0,0.1]
 y2 = f(x2)
 
 # 3. x E [0,0.01]
-x3 = linspace(0,.01,100) # 100 x-values from [0,0.01]
+x3 = linspace(0,.01,10000) # 10000 x-values from [0,0.01]
 y3 = f(x3)
 
 # 4. x E [0,0.001]
-x4 = linspace(0,.001,100) # 100 x-values from [0,0.001]
+x4 = linspace(0,.001,10000) # 10000 x-values from [0,0.001]
 y4 = f(x4)
+
+# 5. Derivative
+x5 = linspace(0,1,100) # 100 x-values from [0,0.001]
+y5 = df(x5)
 
 ## Preparing the figure for all plots
 fig = plt.figure()
@@ -42,7 +54,9 @@ ax1 = plt.subplot(221)
 ax2 = plt.subplot(222)
 ax3 = plt.subplot(223)
 ax4 = plt.subplot(224)
+# ax5 = plt.subplot(111)
 axs = [ ax1, ax2, ax3, ax4 ]
+# axs = [ ax5 ]
 
 # Set labels for axes
 y_label = 'y-axis'
@@ -57,12 +71,14 @@ ax1.set_title('Graph over [0,1]')
 ax2.set_title('Graph over [0,0.1]')
 ax3.set_title('Graph over [0,0.01]')
 ax4.set_title('Graph over [0,0.001]')
+# ax5.set_title('Graph over derivative')
 
 # Plot graphs in various subplots
 ax1.plot(x1,y1)
 ax2.plot(x2,y2)
 ax3.plot(x3,y3)
 ax4.plot(x4,y4)
+# ax5.plot(x5,y5)
 
 # Prepare axes
 for ax in axs:
