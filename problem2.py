@@ -2,12 +2,12 @@
 # fsum returns the sum of floating point values in the iterable;
 # sum is the same, but fsum adds floating point values with extended precision
 from numpy import arange, linspace, pi, e, sin, cos, sqrt
-from math import factorial, fsum 
+from math import factorial, fsum
 
 # f(x) = e^sin(sqrt(x))
 def f(x_value):
-    sum = e**sin(sqrt(x_value))
-    return sum
+    y = e**sin(sqrt(x_value))
+    return y
 
 # Left-point Rule
 def LRAM(a,b,n):
@@ -42,7 +42,34 @@ def simpsons(a,b,n):
     sum_of_2s = 2*fsum(f(x2))
     sum_of_4s = 4*fsum(f(x4))
     return Xk/3*(f(a) + sum_of_2s + sum_of_4s + f(b))
+
+# Prints an error report for the passed in function by comparing results of n1
+# with those of n2 (note: n1 < n2)
+# expected_factor is the expected factor that the error should decrease by.
+# Function is evaluated from 0 to 5
+# Example: error_report_for("MIDPOINT", MRAM, 100, 200, 4, true_value)
+def error_report_for(name, fn, n1, n2, expected_factor, true_val):
+    # Preliminary calculations
+    val1 = fn(0,5,n1) # for n = n1
+    val2 = fn(0,5,n2)
+    error1 = abs(val1 - true_val) # error for n=n1
+    error2 = abs(val2 - true_val)
     
+    # Begin printing
+    print name + " for n = " + str(n1) + ", n = " + str(n2)
+    print
+    print "n | Approximation"
+    print str(n1) + " | " + str(val1)
+    print str(n2) + " | " + str(val2)
+    print
+    print "Error for " + str(n1) + ": |" + str(val1) + " - True value| = " + str(error1)
+    print "Error for " + str(n2) + ": |" + str(val2) + " - True value| = " + str(error2)
+    print
+    print "If the number of intervals increases by a factor of q = " + str(n2/n1) + ","
+    print "the error should decrease by a factor of "+str(expected_factor)
+    print "*Actual error decreased by a factor of " + str(error1/error2)
+    print
+
 print "--------------------------------------------------"
 print "| Part A: 100 subintervals"
 print "--------------------------------------------------"
@@ -99,3 +126,16 @@ print "Trapezoidal rule: " + str(trap(0,5,400))
 
 # Simpson's rule
 print "Simpson's Rule: " + str(simpsons(0,5,400))
+
+print "--------------------------------------------------"
+print "| Error Checking"
+print "--------------------------------------------------"
+
+true_value = 12.04438250045100240831629426443002559542604900442770316
+print "True value: " + str(true_value)
+print
+error_report_for("LEFT POINT", LRAM, 20, 40, 2, true_value)
+error_report_for("RIGHT POINT", RRAM, 20, 40, 2, true_value)
+error_report_for("MIDPOINT", MRAM, 20, 40, 4, true_value)
+error_report_for("TRAPEZOIDAL", trap, 20, 40, 4, true_value)
+error_report_for("SIMPSONS", simpsons, 20, 40, 16, true_value)
